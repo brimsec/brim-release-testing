@@ -2,7 +2,7 @@ name: Brim Windows release candidate creation
 
 on:
   push:
-    tags:
+    branches:
       - rc-v*
 
 jobs:
