@@ -16,7 +16,7 @@ jobs:
       uses: actions-hub/gcloud@master
       env:
         PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
-        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIAL_RELEASES }}
       with:
         args: cp -r gs://brimsec-releases/rc-${{ steps.extract_tag.outputs.tag }} .
         cli: gsutil
