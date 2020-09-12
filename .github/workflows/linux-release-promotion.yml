@@ -1,0 +1,30 @@
+name: Brim linux release artifact promote to tagged
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  promote:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Extract tag name
+      run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+      id: extract_tag
+    - name: Download release candidate artifacts from Google Cloud Storage bucket
+      uses: actions-hub/gcloud@master
+      env:
+        PROJECT_ID: ${{ secrets.PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      with:
+        args: cp -r gs://brimsec-releases/rc-${{ steps.extract_tag.outputs.tag }} .
+        cli: gsutil
+    - name: Upload release candidate artifacts to GitHub Releases
+      uses: svenstaro/upload-release-action@1.1.0
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}
+        file: rc-${{ steps.extract_tag.outputs.tag }}/*
+        file_glob: true
+        overwrite: true
