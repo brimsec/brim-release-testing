@@ -1,4 +1,4 @@
-name: Brim linux release artifact promote to tagged
+name: Brim Windows release artifacts promote to tagged
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   promote:
-    runs-on: ubuntu-18.04
+    runs-on: windows-2019
     steps:
     - name: Extract tag name
       run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
@@ -18,13 +18,13 @@ jobs:
         PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
         APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIAL_RELEASES }}
       with:
-        args: cp -r gs://${{ secrets.GCLOUD_BUCKET_RELEASES }}/brim/linux/rc-${{ steps.extract_tag.outputs.tag }} .
+        args: cp -r gs://${{ secrets.GCLOUD_BUCKET_RELEASES }}/rc-${{ steps.extract_tag.outputs.tag }} .
         cli: gsutil
     - name: Upload release candidate artifacts to GitHub Releases
       uses: svenstaro/upload-release-action@1.1.0
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: rc-${{ steps.extract_tag.outputs.tag }}/*
+        file: rc-${{ steps.extract_tag.outputs.tag }}\*
         file_glob: true
         overwrite: true
