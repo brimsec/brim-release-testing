@@ -49,16 +49,16 @@ jobs:
     - name: Delete destination folder on Google Cloud Storage bucket (if it exists)
       uses: actions-hub/gcloud@master
       env:
-        PROJECT_ID: ${{ secrets.PROJECT_ID }}
-        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIAL_RELEASES }}
       with:
-        args: rm -rf gs://brimsec-releases/${{ steps.extract_branch.outputs.branch }} || true
+        args: rm -rf gs://${{ secrets.GCLOUD_BUCKET_RELEASES }}/${{ steps.extract_branch.outputs.branch }} || true
         cli: gsutil
     - name: Upload release artifacts to Google Cloud Storage bucket
       uses: actions-hub/gcloud@master
       env:
-        PROJECT_ID: ${{ secrets.PROJECT_ID }}
-        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIAL_RELEASES }}
       with:
-        args: mv dist/installers gs://brimsec-releases/${{ steps.extract_branch.outputs.branch }}
+        args: mv dist/installers gs://${{ secrets.GCLOUD_BUCKET_RELEASES }}/${{ steps.extract_branch.outputs.branch }}
         cli: gsutil
