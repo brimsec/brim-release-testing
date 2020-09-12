@@ -18,7 +18,7 @@ jobs:
         PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
         APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIAL_RELEASES }}
       with:
-        args: cp -r gs://brimsec-releases/rc-${{ steps.extract_tag.outputs.tag }} .
+        args: cp -r gs://${{ secrets.GCLOUD_BUCKET_RELEASES }}/rc-${{ steps.extract_tag.outputs.tag }} .
         cli: gsutil
     - name: Upload release candidate artifacts to GitHub Releases
       uses: svenstaro/upload-release-action@1.1.0
