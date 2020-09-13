@@ -12,13 +12,11 @@ jobs:
     - name: Extract tag name
       run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
       id: extract_tag
-    - name: Download release candidate artifacts from Google Cloud Storage bucket
-      uses: actions-hub/gcloud@master
+      shell: bash
+    - name: Copy artifacts from Google Cloud Storage bucket to GitHub Release page
       env:
-        PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
-        APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIAL_RELEASES }}
-      with:
-        args: cp -r gs://${{ secrets.GCLOUD_BUCKET_RELEASES }}/rc-${{ steps.extract_tag.outputs.tag }} .
+        CLOUDSDK_PYTHON: ${{ env.pythonLocation }}\python.exe
+      run: gsutil cp -r gs://${{ secrets.GCLOUD_BUCKET_RELEASES }}/brim/windows/rc-${{ steps.extract_tag.outputs.tag }} .
         cli: gsutil
     - name: Upload release candidate artifacts to GitHub Releases
       uses: svenstaro/upload-release-action@1.1.0
