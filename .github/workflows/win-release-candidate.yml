@@ -60,6 +60,7 @@ jobs:
     - name: Extract branch name
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: extract_branch
+      shell: bash
     - name: Set up Python (needed for Google Cloud Platform)
       uses: actions/setup-python@v2
       with:
