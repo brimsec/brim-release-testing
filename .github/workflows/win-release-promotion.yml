@@ -13,6 +13,18 @@ jobs:
       run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
       id: extract_tag
       shell: bash
+    - name: Set up Python (needed for Google Cloud Platform)
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Setup Google Cloud Platform
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      env:
+        CLOUDSDK_PYTHON: ${{ env.pythonLocation }}\python.exe
+      with:
+        version: '290.0.1'
+        project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCLOUD_CREDENTIAL_RELEASES }}
     - name: Copy artifacts from Google Cloud Storage bucket to GitHub Release page
       env:
         CLOUDSDK_PYTHON: ${{ env.pythonLocation }}\python.exe
