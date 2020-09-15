@@ -1,4 +1,4 @@
-name: Brim macOS release artifact promote to tragged
+name: Brim macOS release artifact promote to tagged
 
 on:
   push:
